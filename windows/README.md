@@ -378,10 +378,13 @@ The standard Claude folders and Claude Desktop itself are never touched.
 ## Troubleshooting
 
 Start with `claude-profiles doctor`. What each instance printed on startup is
-in `%LOCALAPPDATA%\claude-profiles\logs\<id>.log`.
+in `%LOCALAPPDATA%\claude-profiles\logs\<id>.log`. Errors of the loader, the
+tray agent and the shortcuts themselves go to
+`%LOCALAPPDATA%\claude-profiles\logs\claude-profiles.log`.
 
 | Problem                                          | What to do |
 | ------------------------------------------------ | ---------- |
+| After a restart nothing starts: no tray icon, the shortcuts do nothing | Fixed in 1.0.1 — update (`claude-profiles self-update`, or run `Install.cmd` again). Earlier versions crashed whenever they were started from a shortcut instead of from the installer. |
 | "The Claude copy for profiles is missing or outdated" | Loader › Refresh copy, or `claude-profiles update` (close profile windows first). |
 | The hotkey does nothing                          | Is the tray icon there? If not, run **Claude Profiles** from the Startup folder or turn the agent on in Settings. The icon's tooltip says if the hotkey is taken. |
 | All profiles share one taskbar button            | Expected: Claude sets its own taskbar identity. The shortcuts still have their colors. |
@@ -422,6 +425,10 @@ Cowork at a time. Chat and the Code tab aren't affected.
   cards and the tray agent's near-the-limit balloon. Both were written and
   verified on Linux, and the half they share with every system is covered by the
   test suite; what has not been seen on Windows is the Tk layout around them.
+- Fixed in 1.0.1 and checked on a real Windows 11 machine: started from
+  Explorer — the Startup folder, the Start menu — with no installer around, the
+  tray agent, the loader, the token window and the hotkey all come up. Before,
+  every shortcut crashed on start, so nothing survived a restart.
 - **Still unverified:** `claude://` routing with a real Google sign-in, and the
   classic (Squirrel) installer.
 

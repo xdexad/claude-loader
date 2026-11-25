@@ -119,6 +119,7 @@ class Agent:
         self.usage_checked = 0.0
         self.usage_busy = False
         self.pending = []          # warnings waiting to be shown on the UI thread
+        self.tray_added = False
 
     # --- lifetime --------------------------------------------------------------------
 
@@ -178,7 +179,7 @@ class Agent:
         if not self.hicon:
             self.hicon = user32.LoadIconW(None, ctypes.c_void_p(IDI_APPLICATION))
 
-    def _tray(self, action: int, info: str = "", icon: int = NIIF_WARNING) -> None:
+    def _tray(self, action: int, info: str = "", icon: int = NIIF_WARNING) -> bool:
         nid = NOTIFYICONDATAW()
         nid.cbSize = ctypes.sizeof(NOTIFYICONDATAW)
         nid.hWnd = self.hwnd
@@ -196,7 +197,10 @@ class Agent:
             nid.szInfo = info[:255]
             nid.szInfoTitle = "Claude Loader"
             nid.dwInfoFlags = icon
-        shell32.Shell_NotifyIconW(action, ctypes.byref(nid))
+        ok = bool(shell32.Shell_NotifyIconW(action, ctypes.byref(nid)))
+        if action == NIM_ADD:
+            self.tray_added = ok
+        return ok
 
     # --- hotkey -------------------------------------------------------------------------
 
@@ -273,6 +277,9 @@ class Agent:
             self._spawn("launch", profiles[cmd - CMD_PROFILE].id)
 
     def tick(self) -> None:
+        # Right after sign-in the notification area may not be ready yet.
+        if not self.tray_added:
+            self._tray(NIM_ADD)
         mtime = cfgmod.mtime()
         if mtime != self.mtime:
             self.mtime = mtime

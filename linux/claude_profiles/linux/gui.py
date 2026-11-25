@@ -1216,7 +1216,7 @@ class LoaderWindow(Adw.ApplicationWindow):
         compat.about(self, name="Claude Loader", version=VERSION,
                      comments="Run several Claude accounts and agents side by side.\n"
                               "Unofficial, not affiliated with Anthropic.",
-                     website="https://github.com/nurxie/claude-loader")
+                     website="https://github.com/xdexad/claude-loader")
 
     def toast(self, text: str) -> None:
         self.toasts.add_toast(Adw.Toast.new(text))

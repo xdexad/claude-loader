@@ -47,7 +47,7 @@ because each installer combines its own folder with `cross-platform/`.
 ## Install on Linux
 
 ```bash
-git clone https://github.com/nurxie/claude-loader.git
+git clone https://github.com/xdexad/claude-loader.git
 cd claude-loader
 bash linux/install.sh
 ```

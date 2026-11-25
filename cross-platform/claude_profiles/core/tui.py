@@ -12,7 +12,8 @@ from .config import Config, LoaderSettings, Profile
 
 
 def _enable_ansi() -> bool:
-    if not sys.stdout.isatty():
+    # pythonw.exe started from a shortcut has no stdout at all (None).
+    if sys.stdout is None or not sys.stdout.isatty():
         return False
     if paths.IS_WINDOWS:
         try:  # turn on VT processing in the Windows console
